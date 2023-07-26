@@ -29,7 +29,7 @@ cmd_opt.add_argument('-hidden', type=int, default=100, help='dimension of mlp hi
 cmd_opt.add_argument('-max_lv', type=int, default=4, help='max rounds of message passing')
 cmd_opt.add_argument('-learning_rate', type=float, default=0.0001, help='init learning_rate')
 cmd_opt.add_argument('-dropout', type=bool, default=False, help='whether add dropout after dense layer')
-cmd_opt.add_argument('-printAUC', type=bool, default=False, help='whether to print AUC (for binary classification only)')
+cmd_opt.add_argument('-printAUC', type=bool, default=True, help='whether to print AUC (for binary classification only)')
 cmd_opt.add_argument('-extract_features', type=bool, default=False, help='whether to extract final graph features')
 
 cmd_args, _ = cmd_opt.parse_known_args()
@@ -91,6 +91,7 @@ def load_data():
         for i in range(n_g):
             row = f.readline().strip().split()
             n, l = [int(w) for w in row]
+            # print("loading graph %d with %d nodes and label %d" % (i, n, l))
             if not l in label_dict:
                 mapped = len(label_dict)
                 label_dict[l] = mapped

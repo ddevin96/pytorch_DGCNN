@@ -3,3 +3,6 @@ result.txt
 extracted_features*
 *results.txt
 .*
+data/
+venv/
+data/

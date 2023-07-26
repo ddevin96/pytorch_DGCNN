@@ -71,3 +71,8 @@ If you find the code useful, please cite our paper:
 
 Muhan Zhang, muhan@wustl.edu
 3/19/2018
+
+ python3 -m venv venv
+  . venv/bin/activate
+
+pip3 install torch scikit-learn numpy tqdm

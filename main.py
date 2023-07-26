@@ -133,7 +133,7 @@ class Classifier(nn.Module):
         return embed, labels
         
 
-def loop_dataset(g_list, classifier, sample_idxes, optimizer=None, bsize=cmd_args.batch_size):
+def  loop_dataset(g_list, classifier, sample_idxes, optimizer=None, bsize=cmd_args.batch_size):
     total_loss = []
     total_iters = (len(sample_idxes) + (bsize - 1) * (optimizer is None)) // bsize
     pbar = tqdm(range(total_iters), unit='batch')
@@ -225,11 +225,18 @@ if __name__ == '__main__':
             test_loss[2] = 0.0
         print('\033[93maverage test of epoch %d: loss %.5f acc %.5f auc %.5f\033[0m' % (epoch, test_loss[0], test_loss[1], test_loss[2]))
 
-    with open(cmd_args.data + '_acc_results.txt', 'a+') as f:
+    # with open(cmd_args.data + '_acc_results.txt', 'a+') as f:
+    #     f.write(str(test_loss[1]) + '\n')
+
+    # if cmd_args.printAUC:
+    #     with open(cmd_args.data + '_auc_results.txt', 'a+') as f:
+    #         f.write(str(test_loss[2]) + '\n')
+    
+    with open('results/' + cmd_args.data + '_new_acc_results.txt', 'a+') as f:
         f.write(str(test_loss[1]) + '\n')
 
     if cmd_args.printAUC:
-        with open(cmd_args.data + '_auc_results.txt', 'a+') as f:
+        with open('results/' + cmd_args.data + '_new_auc_results.txt', 'a+') as f:
             f.write(str(test_loss[2]) + '\n')
 
     if cmd_args.extract_features:

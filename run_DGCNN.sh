@@ -17,9 +17,134 @@ bsize=1  # batch size, set to 50 or 100 to accelerate training
 dropout=True
 
 # dataset-specific settings
+# dataset-specific settings
 case ${DATA} in
 MUTAG)
-  num_epochs=300
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+MUTAG2)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG1)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG2)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG3)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG4)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG5)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG6)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG7)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG8)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG9)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG10)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG11)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG12)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG13)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG14)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG15)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG16)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG17)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG18)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG19)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG20)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG21)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG22)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG23)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG24)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG25)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG26)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+AGG27)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+LH10)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+LS)
+  num_epochs=100
+  learning_rate=0.0001
+  ;;
+DBLP)
+  num_epochs=100
   learning_rate=0.0001
   ;;
 ENZYMES)
@@ -72,7 +197,7 @@ if [ ${fold} == 0 ]; then
   start=`date +%s`
   for i in $(seq 1 10)
   do
-    CUDA_VISIBLE_DEVICES=${GPU} python main.py \
+    CUDA_VISIBLE_DEVICES=${GPU} python3 main.py \
         -seed 1 \
         -data $DATA \
         -fold $i \
@@ -95,7 +220,7 @@ if [ ${fold} == 0 ]; then
   echo "Average accuracy and std are"
   tail -10 ${DATA}_acc_results.txt | awk '{ sum += $1; sum2 += $1*$1; n++ } END { if (n > 0) print sum / n; print sqrt(sum2 / n - (sum/n) * (sum/n)); }'
 else
-  CUDA_VISIBLE_DEVICES=${GPU} python main.py \
+  CUDA_VISIBLE_DEVICES=${GPU} python3 main.py \
       -seed 1 \
       -data $DATA \
       -fold $fold \
