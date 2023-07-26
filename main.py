@@ -15,6 +15,7 @@ from DGCNN_embedding import DGCNN
 from mlp_dropout import MLPClassifier, MLPRegression
 from sklearn import metrics
 from util import cmd_args, load_data
+from datetime import datetime
 
 class Classifier(nn.Module):
     def __init__(self, regression=False):
@@ -232,12 +233,18 @@ if __name__ == '__main__':
     #     with open(cmd_args.data + '_auc_results.txt', 'a+') as f:
     #         f.write(str(test_loss[2]) + '\n')
     
-    with open('results/' + cmd_args.data + '_new_acc_results.txt', 'a+') as f:
-        f.write(str(test_loss[1]) + '\n')
-
-    if cmd_args.printAUC:
-        with open('results/' + cmd_args.data + '_new_auc_results.txt', 'a+') as f:
-            f.write(str(test_loss[2]) + '\n')
+    #data format
+    # accuracy, auc score, timestamp
+    with open('results/' + cmd_args.data + '_results.txt', 'a+') as f:
+        now = datetime.now().timestamp()
+        # current_time = now.strftime("%H:%M:%S")
+        f.write(str(test_loss[1]) + ',' + str(test_loss[2]) + ',' + str(now) + '\n')
+        # if cmd_args.printAUC:
+            # f.write("auc," + str(test_loss[2]) + '\n')
+        
+    # if cmd_args.printAUC:
+    #     with open('results/' + cmd_args.data + '_new_auc_results.txt', 'a+') as f:
+    #         f.write(str(test_loss[2]) + '\n')
 
     if cmd_args.extract_features:
         features, labels = classifier.output_features(train_graphs)
