@@ -1,9 +1,0 @@
-*.pyc
-result.txt
-extracted_features*
-*results.txt
-.*
-data/
-venv/
-
-build/
