@@ -5,4 +5,5 @@ extracted_features*
 .*
 data/
 venv/
-data/
+
+build/
