@@ -86,6 +86,10 @@ def load_data():
     label_dict = {}
     feat_dict = {}
 
+    g_list2 = []
+    label_dict2 = {}
+    feat_dict2 = {}
+
     with open('data/%s/%s.txt' % (cmd_args.data, cmd_args.data), 'r') as f:
         n_g = int(f.readline().strip())
         for i in range(n_g):
@@ -133,8 +137,60 @@ def load_data():
             g_list.append(GNNGraph(g, l, node_tags, node_features))
     for g in g_list:
         g.label = label_dict[g.label]
+
+    with open('data/%s/%s-test.txt' % (cmd_args.data, cmd_args.data), 'r') as f:
+        n_g = int(f.readline().strip())
+        for i in range(n_g):
+            row = f.readline().strip().split()
+            n, l = [int(w) for w in row]
+            # print("loading graph %d with %d nodes and label %d" % (i, n, l))
+            if not l in label_dict2:
+                mapped = len(label_dict2)
+                label_dict2[l] = mapped
+            g = nx.Graph()
+            node_tags = []
+            node_features = []
+            n_edges = 0
+            for j in range(n):
+                g.add_node(j)
+                row = f.readline().strip().split()
+                tmp = int(row[1]) + 2
+                if tmp == len(row):
+                    # no node attributes
+                    row = [int(w) for w in row]
+                    attr = None
+                else:
+                    row, attr = [int(w) for w in row[:tmp]], np.array([float(w) for w in row[tmp:]])
+                if not row[0] in feat_dict2:
+                    mapped = len(feat_dict2)
+                    feat_dict2[row[0]] = mapped
+                node_tags.append(feat_dict2[row[0]])
+
+                if attr is not None:
+                    node_features.append(attr)
+
+                n_edges += row[1]
+                for k in range(2, len(row)):
+                    g.add_edge(j, row[k])
+
+            if node_features != []:
+                node_features = np.stack(node_features)
+                node_feature_flag = True
+            else:
+                node_features = None
+                node_feature_flag = False
+
+            #assert len(g.edges()) * 2 == n_edges  (some graphs in COLLAB have self-loops, ignored here)
+            assert len(g) == n
+            g_list2.append(GNNGraph(g, l, node_tags, node_features))
+    for g in g_list2:
+        g.label = label_dict2[g.label]
+
+
+    cmd_args.num_class = len(label_dict)
     cmd_args.num_class = len(label_dict)
     cmd_args.feat_dim = len(feat_dict) # maximum node label (tag)
+    cmd_args.feat_dim = len(feat_dict1) # maximum node label (tag)
     cmd_args.edge_feat_dim = 0
     if node_feature_flag == True:
         cmd_args.attr_dim = node_features.shape[1] # dim of node features (attributes)
@@ -147,7 +203,7 @@ def load_data():
     if cmd_args.test_number == 0:
         train_idxes = np.loadtxt('data/%s/10fold_idx/train_idx-%d.txt' % (cmd_args.data, cmd_args.fold), dtype=np.int32).tolist()
         test_idxes = np.loadtxt('data/%s/10fold_idx/test_idx-%d.txt' % (cmd_args.data, cmd_args.fold), dtype=np.int32).tolist()
-        return [g_list[i] for i in train_idxes], [g_list[i] for i in test_idxes]
+        return [g_list[i] for i in train_idxes], [g_list2[i] for i in test_idxes]
     else:
         return g_list[: n_g - cmd_args.test_number], g_list[n_g - cmd_args.test_number :]
 
